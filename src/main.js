@@ -1,4 +1,29 @@
-import { createApp } from 'vue'
-import App from './App.vue'
+import { createApp } from "vue";
+import App from "./App.vue";
+import { createRouter, createWebHistory } from "vue-router";
+import RegisterVue from "./components/RegisterVue.vue";
+import LoginVue from "./components/LoginVue.vue";
+import HomeVue from "./components/HomeVue.vue";
 
-createApp(App).mount('#app')
+const routes = [
+  { path: "/register", component: RegisterVue, name: "register" },
+  { path: "/login", component: LoginVue, name: "login" },
+  { path: "/", component: HomeVue, name: "home", meta: { requiresAuth: true } },
+];
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
+});
+
+router.beforeEach((to, from, next) => {
+  const isLoggedIn = localStorage.getItem("loggedIn") === "true";
+
+  if (to.matched.some((record) => record.meta.requiresAuth) && !isLoggedIn) {
+    next("/login");
+  } else {
+    next();
+  }
+});
+
+createApp(App).use(router).mount("#app");
