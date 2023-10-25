@@ -3,6 +3,13 @@
 ## Project setup
 ```
 npm install
+
+cd app
+
+node server.js
+
+npm run serve
+
 ```
 
 ### Compiles and hot-reloads for development
